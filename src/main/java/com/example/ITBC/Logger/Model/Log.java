@@ -1,29 +1,45 @@
 package com.example.ITBC.Logger.Model;
 
-import com.example.ITBC.Logger.Model.Enum.LogType;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
-@Table(name = "log_table")
+@Table(name = "logs")
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class Log {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    private String message;
-    private LogType logType;
-    private LocalDate createdDate;
+    @Column(name = "id")
+    private Long id;
 
-    public Log(String message, LogType logType, LocalDate createdDate) {
-        this.message = message;
-        this.logType = logType;
-        this.createdDate = createdDate;
+    @Column(name = "message")
+    private String message;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "logType")
+    private LogType logType;
+
+    @Column(name = "created_date", nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
+    private Date createdDate;
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Log otherLog)) return false;
+        return id != null && id.equals(otherLog.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

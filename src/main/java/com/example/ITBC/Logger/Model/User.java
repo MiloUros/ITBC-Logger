@@ -1,28 +1,53 @@
 package com.example.ITBC.Logger.Model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
-@Table(name = "user_table")
+@AllArgsConstructor
+@Table(name = "users")
+@Builder(toBuilder = true)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "password")
     private String password;
 
-    public User(String userName, String email, String password) {
-        this.userName = userName;
-        this.email = email;
-        this.password = password;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private UserRoles role;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    @Column(name = "user_logs")
+    private List<Log> userLogs = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User otherUser)) return false;
+        return Objects.equals(getUsername(), otherUser.getUsername());
+    }
+
+    @Override
+    public int hashCode() {
+        return getUsername().hashCode();
     }
 }

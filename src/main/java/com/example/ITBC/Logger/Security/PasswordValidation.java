@@ -1,11 +1,11 @@
-package com.example.ITBC.Logger;
+package com.example.ITBC.Logger.Security;
 
 import org.passay.*;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
+@Component
+public class PasswordValidation {
 
-@Service
-public class UserService {
     public static PasswordValidator validator = new PasswordValidator(
             new LengthRule(8, 16),
             new CharacterRule(EnglishCharacterData.Digit, 1),
@@ -13,8 +13,7 @@ public class UserService {
             new WhitespaceRule()
     );
 
-
-    public RuleResult validPassword(String password) {
+    public RuleResult validatePassword(String password) {
         final char[] charArrayPassword = password.toCharArray();
         return validator.validate(new PasswordData(new String(charArrayPassword)));
     }
