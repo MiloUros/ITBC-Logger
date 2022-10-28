@@ -1,4 +1,4 @@
-package com.example.ITBC.Logger.Model;
+package com.example.ITBC.Logger.Model.mapper;
 
 import com.example.ITBC.Logger.Model.User;
 import com.example.ITBC.Logger.Model.UserRoles;
@@ -22,12 +22,12 @@ public abstract class UserMapper {
     @Mapping(target = "password", expression = "java(passwordEncoder.encode(dto.getPassword()))")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", ignore = true)
-    @Mapping(target = "userLogs", ignore = true)
+    //@Mapping(target = "userLogs", ignore = true)
     public abstract User userSignUpDtoToEntity(UserSingUpDTO dto);
 
     @Mapping(target = "id", ignore = true)
-    public User userSignInDto(UserSingInDTO dto){
-        return User.builder().username(dto.getUsername()).password(passwordEncoder.encode(dto.getPassword()))
-                .role(UserRoles.USER).build();
-    }
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "email", ignore = true)
+    //@Mapping(target = "userLogs", ignore = true)
+    public abstract User userSignInDto(UserSingInDTO dto);
 }

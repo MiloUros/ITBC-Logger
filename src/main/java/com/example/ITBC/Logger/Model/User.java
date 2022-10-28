@@ -34,10 +34,9 @@ public class User {
     @Column(name = "role")
     private UserRoles role;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
-    @Column(name = "user_logs")
-    private List<Log> userLogs = new ArrayList<>();
+//    //    @OneToMany(mappedBy = "user")
+//    @Column(name = "user_logs")
+//    private List<Log> userLogs = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

@@ -12,5 +12,4 @@ public class CreateLogDTO {
 
     private String massage;
     private LogType logType;
-    private Date createdDate;
 }
