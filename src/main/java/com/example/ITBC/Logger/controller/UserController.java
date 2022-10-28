@@ -12,9 +12,16 @@ import com.example.ITBC.Logger.model.mapper.UserMapper;
 import com.example.ITBC.Logger.repository.LogRepository;
 import com.example.ITBC.Logger.security.TokenDTO;
 import com.example.ITBC.Logger.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,18 +41,36 @@ public class UserController {
     private final UserMapper userMapper;
     private final LogRepository logRepository;
 
-    @PostMapping("/register")
+    @Operation(summary = "Create user.")
+    @ApiResponse(responseCode = "201", content = {
+            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserInfoDTO.class))
+    })
+    @PostMapping(value = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserInfoDTO> createUser(@RequestBody UserSingUpDTO user) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userMapper.userToUserInfoDTO(userService.createUser(user)));
     }
 
-    @PostMapping("/login")
+    @Operation(summary = "Obtain access token.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TokenDTO.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Invalid username or password!")
+    })
+    @PostMapping(value = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<TokenDTO> loginUser(@RequestBody UserSingInDTO singInDTO) {
         String jwt = userService.getToken(singInDTO.getUsername(), singInDTO.getPassword());
         return ResponseEntity.ok(createTokenDTO(jwt));
     }
 
+    @Operation(summary = "Create log.", security = { @SecurityRequirement(name = "JWT") })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Log created", content = {
+                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = String.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized.")
+    })
     @PostMapping("/create")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> createLog(@RequestBody CreateLogDTO dto) {
@@ -55,12 +80,26 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(dto.getMessage());
     }
 
+    @Operation(summary = "Get list of all users.", security = { @SecurityRequirement(name = "JWT") })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserInfoDTO.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized.")
+    })
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserInfoDTO>> getAllUser() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    @Operation(summary = "Change user password with provided id", security = { @SecurityRequirement(name = "JWT") })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success", content = {
+                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = String.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized.")
+    })
     @PatchMapping("/reset-password/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> changePassword(@RequestBody String password, @PathVariable(name = "id") Long id) {

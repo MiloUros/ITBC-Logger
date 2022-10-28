@@ -1,5 +1,6 @@
 package com.example.ITBC.Logger.model.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,6 +8,9 @@ import lombok.Data;
 @Builder(toBuilder = true)
 public class UserSingInDTO {
 
+    @ApiModelProperty(value = "User's username.", example = "someuser123")
     private String username;
+
+    @ApiModelProperty(value = "Plaintext password.", example = "p@ssw0rd")
     private String password;
 }
