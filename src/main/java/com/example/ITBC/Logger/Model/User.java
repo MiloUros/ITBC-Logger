@@ -1,11 +1,10 @@
 package com.example.ITBC.Logger.Model;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Getter
@@ -34,9 +33,9 @@ public class User {
     @Column(name = "role")
     private UserRoles role;
 
-//    //    @OneToMany(mappedBy = "user")
-//    @Column(name = "user_logs")
-//    private List<Log> userLogs = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @Column(name = "user_logs")
+    private Set<Log> userLogs = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

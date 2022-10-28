@@ -10,6 +10,6 @@ import java.util.Date;
 @Builder(toBuilder = true)
 public class CreateLogDTO {
 
-    private String massage;
+    private String message;
     private LogType logType;
 }

@@ -34,10 +34,9 @@ public class Log {
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     private Date createdDate;
-//
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "user_id")
-//    private User user;
+
+    @ManyToOne()
+    private User user;
 
     public boolean equals(Object o) {
         if (this == o) return true;

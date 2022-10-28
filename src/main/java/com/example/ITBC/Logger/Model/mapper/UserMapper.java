@@ -22,12 +22,12 @@ public abstract class UserMapper {
     @Mapping(target = "password", expression = "java(passwordEncoder.encode(dto.getPassword()))")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", ignore = true)
-    //@Mapping(target = "userLogs", ignore = true)
+    @Mapping(target = "userLogs", ignore = true)
     public abstract User userSignUpDtoToEntity(UserSingUpDTO dto);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "email", ignore = true)
-    //@Mapping(target = "userLogs", ignore = true)
+    @Mapping(target = "userLogs", ignore = true)
     public abstract User userSignInDto(UserSingInDTO dto);
 }

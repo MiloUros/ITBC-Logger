@@ -14,15 +14,27 @@ public class GlobalExceptionHandler {
         return createErrorMessage(e.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
     @ExceptionHandler(InvalidCredentialsException.class)
     public ErrorMessage invalidCredentialsException(InvalidCredentialsException e) {
+        return createErrorMessage(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
+    @ExceptionHandler(InvalidObjectException.class)
+    public ErrorMessage invalidObjectException(InvalidObjectException e) {
         return createErrorMessage(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidEmailException.class)
     public ErrorMessage invalidEmailException(InvalidEmailException e) {
+        return createErrorMessage(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ErrorMessage usernameNotFoundException(UsernameNotFoundException e) {
         return createErrorMessage(e.getMessage());
     }
 

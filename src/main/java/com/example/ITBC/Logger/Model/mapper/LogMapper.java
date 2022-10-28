@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 public abstract class LogMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "message", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "user", ignore = true)
     public abstract Log createLogDtoToEntity(CreateLogDTO createLogDTO);
