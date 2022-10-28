@@ -59,7 +59,6 @@ public class SecurityConfiguration {
                 .oauth2ResourceServer(resourceServer -> resourceServer
                         .jwt()
                         .jwtAuthenticationConverter(new RolesClaimConverter(new JwtGrantedAuthoritiesConverter()))
-                        .jwtAuthenticationConverter(new JwtAuthenticationConverter())
                 )
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
